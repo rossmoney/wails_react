@@ -1,39 +1,53 @@
-import React from 'react';
-import Form from 'react-bootstrap/Form'
+import React, { Component } from 'react';
 
-class DepartmentSelect extends React.Component {
+import { Button } from 'react-bootstrap'
+import Select from 'react-select';
+
+class DepartmentSelect extends Component {
+
+    state = {
+      departments: '',
+      selectedDepartment: '',
+      installResult: '',
+    }
+
     constructor(props) {
       super(props);
-      this.state = {value: 'dev'};
-  
+
       this.handleChange = this.handleChange.bind(this);
-      this.handleSubmit = this.handleSubmit.bind(this);
+      this.handleClick = this.handleClick.bind(this);
+
+      var self = this;
+
+      window.go.main.App.GetDepartments().then((result) => {
+        var departments = JSON.parse(result);
+        self.setState({ departments });
+      });
     }
   
-    handleChange(event) {
-      this.setState({value: event.target.value});
+    handleChange(selectedDepartment) {
+      this.setState({ selectedDepartment });
     }
   
-    handleSubmit(event) {
-      alert('Your department is: ' + this.state.value);
-      event.preventDefault();
+    handleClick() {
+      //alert('Your department is: ' + this.state.selectedDepartment.label);
+      //event.preventDefault();
+      console.log('hi');
+      var self = this;
+      window.go.main.App.Install(this.state.selectedDepartment.value).then((installResult) => {
+        self.setState({ installResult });
+      });
     }
   
     render() {
       return (
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Select department to install relevant software:
-            <Form.Select aria-label="Default select example" value={this.state.value} onChange={this.handleChange}>
-              <option></option>
-              <option value="dev">Dev</option>
-              <option value="devops">DevOps</option>
-              <option value="marketing">Marketing</option>
-              <option value="strategy">Strategy</option>
-            </Form.Select>
-          </label>
-          <input className="btn btn-primary" type="submit" value="Submit" />
-        </form>
+          <div>
+            <label className="form-label">
+              Select department to install relevant software:
+              <Select options={ this.state.departments } value={this.selectedDepartment} onChange={this.handleChange} />
+            </label>
+            <Button variant="primary" onClick={this.handleClick}>Install</Button>
+          </div>
       );
     }
 }

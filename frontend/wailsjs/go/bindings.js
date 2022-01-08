@@ -5,11 +5,26 @@ const go = {
   "main": {
     "App": {
       /**
+       * GetDepartments
+       * @returns {Promise<string>}  - Go Type: string
+       */
+      "GetDepartments": () => {
+        return window.go.main.App.GetDepartments();
+      },
+      /**
        * Greet
        * @returns {Promise<string>}  - Go Type: string
        */
       "Greet": () => {
         return window.go.main.App.Greet();
+      },
+      /**
+       * Install
+       * @param {string} arg1 - Go Type: string
+       * @returns {Promise<string>}  - Go Type: string
+       */
+      "Install": (arg1) => {
+        return window.go.main.App.Install(arg1);
       },
       /**
        * Sysvars
@@ -29,6 +44,23 @@ const go = {
        */
       "All": () => {
         return window.go.sys.Sys.All();
+      },
+      /**
+       * Exec
+       * @param {string} arg1 - Go Type: string
+       * @returns {Promise<void>} 
+       */
+      "Exec": (arg1) => {
+        return window.go.sys.Sys.Exec(arg1);
+      },
+      /**
+       * GetRemoteFile
+       * @param {string} arg1 - Go Type: string
+       * @param {string} arg2 - Go Type: string
+       * @returns {Promise<void>} 
+       */
+      "GetRemoteFile": (arg1, arg2) => {
+        return window.go.sys.Sys.GetRemoteFile(arg1, arg2);
       },
     },
   },

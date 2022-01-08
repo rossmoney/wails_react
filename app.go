@@ -5,11 +5,18 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"path"
+	"runtime"
 )
 
 // App struct
 type App struct {
 	ctx context.Context
+}
+
+type Department struct {
+	Label string `json:"label"`
+	Value string `json:"value"`
 }
 
 // NewApp creates a new App application struct
@@ -48,4 +55,64 @@ func (a *App) Sysvars() string {
 		return fmt.Sprintf("error: could not convert to json")
 	}
 	return string(b)
+}
+
+func departments() []Department {
+
+	var depts = []Department{
+		Department{
+			Value: "dev",
+			Label: "Dev",
+		},
+		Department{
+			Value: "devops",
+			Label: "Dev Ops",
+		},
+		Department{
+			Value: "marketing",
+			Label: "Marketing",
+		},
+		Department{
+			Value: "strategy",
+			Label: "Strategy",
+		},
+	}
+
+	return depts
+}
+
+func (a *App) GetDepartments() string {
+	depts, err := json.Marshal(departments())
+	if err != nil {
+		fmt.Println(err)
+		return fmt.Sprintf("error: could not convert to json")
+	}
+	fmt.Println(string(depts))
+	return string(depts)
+}
+
+func (a *App) Install(department string) string {
+	sys := &sys.Sys{}
+	switch department {
+	case "marketing":
+	case "strategy":
+	case "dev":
+		var vboxUrl = ""
+		if runtime.GOOS == "windows" {
+			vboxUrl = "https://download.virtualbox.org/virtualbox/6.1.30/VirtualBox-6.1.30-148432-Win.exe"
+		}
+		if runtime.GOOS == "darwin" {
+			vboxUrl = "https://download.virtualbox.org/virtualbox/6.1.30/VirtualBox-6.1.30-148432-OSX.dmg"
+		}
+		if vboxUrl != "" {
+			fileName := path.Base(vboxUrl)
+			sys.GetRemoteFile(fileName, vboxUrl)
+			sys.Exec(fileName)
+		}
+	case "devops":
+	default:
+		fmt.Println("no valid option specified")
+		return "Fail"
+	}
+	return "Success"
 }

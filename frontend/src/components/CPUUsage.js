@@ -9,7 +9,7 @@ class CPUUsage extends React.Component {
     render() {
         return (
             <>
-            <h1>CPU is {this.props.percent}%</h1>
+            <h2>CPU is {this.props.percent}%</h2>
             </>
         );
     }
